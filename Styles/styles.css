@@ -31,6 +31,7 @@
 
 .gallery {
 	width: 100%;
+	max-width: 1200px;
 	margin: 0 auto;
 }
 
@@ -38,9 +39,23 @@
 	margin: 0 30px 60px 30px;
 }
 
+
+/* LIGHTBOX CUSTOMIZATION STYLES */
+
+.lb-dataContainer {
+	max-width: 600px;
+	margin-top: 50px;
+}
+
+.lb-data .lb-caption {
+	font-family: Courier;
+	line-height: 1.4em;
+}
+
+
 /* MEDIA QUERIES */
 
-@media (min-width: 768px) {
+@media (min-width: 500px) {
 	.main-header,
 	.gallery {
 		flex-direction: row;
