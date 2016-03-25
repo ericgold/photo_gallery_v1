@@ -1,4 +1,4 @@
-lightbox.option({
+ lightbox.option({
 	showImageNumberLabel: false,
 	positionFromTop: 200,
 	maxWidth: 960,
