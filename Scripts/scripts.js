@@ -1,15 +1,38 @@
 /* Create an overlay with image container, caption,
 left arrow, and right arrow */
 
+var $overlay = $('<div id="overlay"></div>');
+var $image = $("<img>");
+var $caption = $("<p></p>");
+
+// Add left arrow to overlay
 // Add image to overlay
+$overlay.append($image);
+// Add right arrow to overlay
 // Add caption to overlay
+$overlay.append($caption);
+// Add overlay to document
+$("body").append($overlay);
 
 // On image link click
+$(".thumbnail a").click(function(event){
 	// Prevent default click behavior
+	event.preventDefault();
+	var imageLocation = $(this).attr("href");
+	// Update overlay with linked image
+	$image.attr("src", imageLocation);
 	// Show overlay
+	$overlay.show();
 	// Get child's alt attribute and set caption
+	var captionText = $(this).children("img").attr("alt");
+	$caption.text(captionText);
+});
+
 // On overlay click
+$overlay.click(function(){
 	// Hide overlay
+	$overlay.hide();
+});
 // On right arrow click OR right arrow keypress
 	// Advance to next photo
 // On left arrow click OR left arrow keypress

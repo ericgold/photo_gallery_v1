@@ -39,6 +39,28 @@
 	margin: 0 30px 60px 30px;
 }
 
+/* OVERLAY STYLES */
+
+#overlay {
+	background: rgba(0,0,0,0.7);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+	text-align: center;
+}
+
+#overlay img {
+	max-width: 780px;
+}
+
+#overlay p {
+	color: white;
+	max-width: 600px;
+}
+
 
 
 /* MEDIA QUERIES */
