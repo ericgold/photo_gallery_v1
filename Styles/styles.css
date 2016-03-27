@@ -58,6 +58,19 @@
 	max-width: 780px;
 }
 
+#overlay img,
+#left-arrow,
+#right-arrow {
+	display: inline-block;
+}
+
+#left-arrow,
+#right-arrow {
+	width: 10%;
+	max-width: 40px;
+	font-size: 4em;
+}
+
 #overlay p {
 	color: white;
 	max-width: 600px;
