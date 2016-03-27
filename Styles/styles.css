@@ -53,12 +53,15 @@
 }
 
 #overlay img {
+	width: 80%;
+	margin-top: 10%;
 	max-width: 780px;
 }
 
 #overlay p {
 	color: white;
 	max-width: 600px;
+	margin: auto;
 }
 
 
