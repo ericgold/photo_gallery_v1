@@ -36,16 +36,28 @@ $(".thumbnail a").click(function(event){
 	$caption.text(captionText);
 });
 
-// On right arrow click OR right arrow keypress
-	// Advance to next photo
-// On left arrow click OR left arrow keypress
-	// Go back to last photo
-
 // On overlay click
 $overlay.click(function(){
 	// Hide overlay
 	$overlay.hide();
 });
+
+// On left arrow click OR left arrow keypress
+	// Go back to last photo
+$leftArrow.click(function(){
+	
+	imageLocation = $(this).prev("a").attr("href");
+	$image.attr("src", imageLocation);
+	$overlay.show();
+	captionText = $(this).next().next("img").attr("alt");
+	$caption.text(captionText);
+})
+
+// On right arrow click OR right arrow keypress
+	// Advance to next photo
+
+
+
 
 
 
@@ -75,7 +87,7 @@ $thumbnails.each(function() {
 			// Show corresponding image (animated)
 		// if caption does not contain string
 			// Hide corresponding image	(animated)
-			
+
 var filter = function() {
 	var query = this.value.trim().toLowerCase();
 
