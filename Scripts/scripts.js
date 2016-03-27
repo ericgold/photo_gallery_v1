@@ -4,12 +4,20 @@ left arrow, and right arrow */
 var $overlay = $("<div id='overlay'></div>");
 var $image = $("<img>");
 var $caption = $("<p id='caption'></p>");
-var $leftArrow = $("<p id='left-arrow'>&#10094</p>");
-var $rightArrow = $("<p id='right-arrow'>&#10095</p>");
+var $leftArrow = $("<button id='left-arrow'>&#10094</button>");
+var $rightArrow = $("<button id='right-arrow'>&#10095</button>");
 
+// Variables for search 
 var $searchField = $("input.search");
 var $thumbnails = $(".thumbnail img");
 var cache = [];
+
+// Keep track of image index for prev/next navigation
+var $index = 0;
+
+// Get list of gallery images and track length of list
+var $galleryLength = $thumbnails.length;
+
 
 // Add left arrow to overlay
 $overlay.append($leftArrow);
@@ -22,56 +30,88 @@ $overlay.append($caption);
 // Add overlay to document
 $("body").append($overlay);
 
+/* Update image function 
+(use for initial overlay and overlay navigation)*/
+
+var updateImage = function(imageLocation, imageCaption) {
+	$image.attr("src", imageLocation);
+	$caption.text(imageCaption);
+}
+
+
 // On image link click
 $(".thumbnail a").click(function(event){
 	// Prevent default click behavior
 	event.preventDefault();
+	// Set imageLocation as clicked image's href
 	var imageLocation = $(this).attr("href");
-	// Update overlay with linked image
-	$image.attr("src", imageLocation);
-	// Show overlay
-	$overlay.show();
 	// Get child's alt attribute and set caption
-	var captionText = $(this).children("img").attr("alt");
-	$caption.text(captionText);
+	var imageCaption = $(this).children("img").attr("alt");
+	// Update index to current selected image
+	$index = $(this).parent().index();
+	// call updateImage function
+	updateImage(imageLocation, imageCaption);
+	// Show overlay
+	$overlay.slideDown(imageLocation);
+});
+
+// Overlay nav button function
+var prevNext = function(prev) {
+	//when prev is false, increase index
+	//when prev is true, decrease index
+	if (!prev) {
+		$index++;
+	} else {
+		$index--;
+	}
+
+	// enables overlay navigation wraparound
+	if ($index < 0) {
+		$index = $galleryLength-1;
+	} else if ($index > $galleryLength-1) {
+		$index = 0;
+	}
+
+	//Get element by index and get its link
+	var newImgSelected = $(".thumbnail").get($index).getElementsByTagName("a");
+
+	//Get link info
+	var imageLocation = $(newImgSelected).attr("href");
+	var imageCaption = $(newImgSelected).children("img").attr("alt");
+
+	//Update overlay
+	updateImage(imageLocation, imageCaption);
+}
+
+//Cycles through images in overlay on arrow clicks
+$leftArrow.click(function(event){
+	prevNext(true);
+});
+
+$rightArrow.click(function(event){
+	prevNext();
+});
+
+//Cycles through images in overlay on keyboard arrow press
+$(document).bind('keydown', function(event) {
+	if(event.keyCode == 37) {
+		prevNext(true);
+	} else if(event.keyCode == 39) {
+		prevNext();
+	}
 });
 
 // On overlay click
-$overlay.click(function(){
+$overlay.click(function(event){
 	// Hide overlay
-	$overlay.hide();
+	if(event.target.id == "overlay")
+	$(this).slideUp("fast");
 });
-
-// On left arrow click OR left arrow keypress
-	// Go back to last photo
-$leftArrow.click(function(){
-	
-	imageLocation = $(this).prev("a").attr("href");
-	$image.attr("src", imageLocation);
-	$overlay.show();
-	captionText = $(this).next().next("img").attr("alt");
-	$caption.text(captionText);
-})
-
-// On right arrow click OR right arrow keypress
-	// Advance to next photo
-
-
-
-
 
 
 /* Enable search, dynamically hiding photos whose
 captions do not include the inputted string and 
 updating for each character entered */
-
-
-
-// When search input is emtpy, show all images
-// On character input (keyup)
-
-
-
 
 // Add alt text of each gallery image to cache array
 $thumbnails.each(function() {
@@ -95,27 +135,19 @@ var filter = function() {
 		var index = 0;
 		if (query) {
 			index = img.text.indexOf(query);
-			img.element.style.display = index === -1 ? 'none' : '';
+			if (index === -1) {
+				img.element.style.display = 'none';
+
+			} else {
+				img.element.style.display = '';
+			}
 		};
 	});
 }
 
+// Triggers filter function on keyup in search field
 $searchField.keyup(filter);
-
-
 
 /* Support additional media types 
 like YouTube videos */
 
-
-/*  LIGHTBOX PLUGIN OPTIONS
-
-lightbox.option({
-	showImageNumberLabel: false,
-	positionFromTop: 200,
-	maxWidth: 960,
-	maxHeight: 600,
-	resizeDuration: 550,
-});
-
-*/
