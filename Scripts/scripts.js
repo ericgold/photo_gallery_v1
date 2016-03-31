@@ -4,8 +4,8 @@ left arrow, and right arrow */
 var $overlay = $("<div id='overlay'></div>");
 var $image = $("<img>");
 var $caption = $("<p id='caption'></p>");
-var $leftArrow = $("<button id='left-arrow'>&#10094</button>");
-var $rightArrow = $("<button id='right-arrow'>&#10095</button>");
+var $leftArrow = $("<button class='arrow'>&#10094</button>");
+var $rightArrow = $("<button class='arrow'>&#10095</button>");
 
 // Variables for search 
 var $searchField = $("input.search");
@@ -124,24 +124,37 @@ $thumbnails.each(function() {
 // Compare input string to captions
 // For each caption
 		// if the caption contains string
-			// Show corresponding image (animated)
+			// Show corresponding image (to be animated)
 		// if caption does not contain string
-			// Hide corresponding image	(animated)
+			// Hide corresponding image	(to beanimated)
 
 var filter = function() {
+	//trims and lower-cases search query
 	var query = this.value.trim().toLowerCase();
 
+	//for each img element in the cache array
 	cache.forEach(function(img) {
+		//sets counter to number images in gallery
 		var index = 0;
+		
+		//if there is a search query entered
 		if (query) {
+			//sets index to be the index of the img whose alt contains the query
 			index = img.text.indexOf(query);
+			var $thumbnailDiv = $('img.element.parentNode.parentNode');
+			//if there is no match
 			if (index === -1) {
-				img.element.style.display = 'none';
-
+				//sets display for that img's 
+				//thumbnail container div (parent's parent) to none
+				img.element.parentNode.parentNode.style.display = 'none';
+				
+				//else sets display for that img's 
+				//thumbnail container div (parent's parent) to default
 			} else {
-				img.element.style.display = '';
+				img.element.parentNode.parentNode.style.display = '';
 			}
-		};
+	
+		}
 	});
 }
 
