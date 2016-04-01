@@ -126,7 +126,7 @@ $thumbnails.each(function() {
 		// if the caption contains string
 			// Show corresponding image (to be animated)
 		// if caption does not contain string
-			// Hide corresponding image	(to beanimated)
+			// Hide corresponding image	(to be animated)
 
 var filter = function() {
 	//trims and lower-cases search query
@@ -141,7 +141,7 @@ var filter = function() {
 		if (query) {
 			//sets index to be the index of the img whose alt contains the query
 			index = img.text.indexOf(query);
-			var $thumbnailDiv = $('img.element.parentNode.parentNode');
+			
 			//if there is no match
 			if (index === -1) {
 				//sets display for that img's 
@@ -152,8 +152,8 @@ var filter = function() {
 				//thumbnail container div (parent's parent) to default
 			} else {
 				img.element.parentNode.parentNode.style.display = '';
-			}
-	
+			} 
+		
 		}
 	});
 }
