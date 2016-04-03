@@ -13,8 +13,10 @@
 
 .main-header {
 	height: 7em;
-	margin: auto;
 	padding: 1em .5em;
+	position: fixed;
+	width: 100%;
+	background-color: #fff;
 }
 
 .search {
@@ -22,7 +24,7 @@
 	font-size: 16px;
 	border: 2px solid #e5e5e5;
 	border-radius: 5px;
-	width: 100%;
+	width: 90%;
 	max-width: 460px;
 }
 
@@ -37,12 +39,12 @@
 .gallery {
 	width: 100%;
 	max-width: 1200px;
-	margin: 0 auto;
-	/*background-image: radial-gradient(ellipse farthest-corner at 45px 45px , #FFFFFF 0%, #157A6B 50%, #072924 95%);
-*/
+	margin: 0px auto;
+	padding-top: 7em;
 }
 
-.thumbnail {
+.thumbnail,
+.video-thumbnail {
 	margin: 0 30px 60px 30px;
 }
 
@@ -68,6 +70,7 @@
 	align-items: center;
 	justify-content: center;
 	margin: auto;
+
 }
 
 #overlay img {

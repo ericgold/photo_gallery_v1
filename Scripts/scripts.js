@@ -10,7 +10,7 @@ var $rightArrow = $("<button class='arrow'>&#10095</button>");
 
 //variables for 
 var $overlay2 = $("<div id='overlayTwo'></div>");
-var $youtubeOverlay = $('<iframe id="youtube-canvas" width="420" height="315" src="https://www.youtube.com/watch?v=Pkhj9z14TBo"> </iframe>');
+var $youtubeOverlay = $('<iframe id="youtube-canvas" width="560" height="315" src="https://www.youtube.com/embed/8rFG-Uk4hZs" frameborder="0" allowfullscreen></iframe>');
 
 // Variables for search 
 var $searchField = $("input.search");
