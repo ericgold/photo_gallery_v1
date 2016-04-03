@@ -2,10 +2,15 @@
 left arrow, and right arrow */
 
 var $overlay = $("<div id='overlay'></div>");
+var $innerOverlay = $("<div id='inner-overlay'></div>")
 var $image = $("<img>");
 var $caption = $("<p id='caption'></p>");
 var $leftArrow = $("<button class='arrow'>&#10094</button>");
 var $rightArrow = $("<button class='arrow'>&#10095</button>");
+
+//variables for 
+var $overlay2 = $("<div id='overlayTwo'></div>");
+var $youtubeOverlay = $('<iframe id="youtube-canvas" width="420" height="315" src="https://www.youtube.com/watch?v=Pkhj9z14TBo"> </iframe>');
 
 // Variables for search 
 var $searchField = $("input.search");
@@ -19,16 +24,22 @@ var $index = 0;
 var $galleryLength = $thumbnails.length;
 
 
-// Add left arrow to overlay
-$overlay.append($leftArrow);
-// Add image to overlay
-$overlay.append($image);
+// Add left arrow to inner overlay div
+$innerOverlay.append($leftArrow);
+// Add image to inner overlay div
+$innerOverlay.append($image);
 // Add right arrow to overlay
-$overlay.append($rightArrow);
+$innerOverlay.append($rightArrow);
+// Add a div inside the overlay for flex positioning the img and arrow buttons
+$overlay.append($innerOverlay);
 // Add caption to overlay
 $overlay.append($caption);
+
+$overlay2.append($youtubeOverlay);
 // Add overlay to document
 $("body").append($overlay);
+//Add overlay2 to document
+$("body").append($overlay2);
 
 /* Update image function 
 (use for initial overlay and overlay navigation)*/
@@ -113,48 +124,24 @@ $overlay.click(function(event){
 captions do not include the inputted string and 
 updating for each character entered */
 
-// Add alt text of each gallery image to cache array
-$thumbnails.each(function() {
-	cache.push({
-		element: this,
-		text: this.alt.trim().toLowerCase()
-	});
-});
-
-// Compare input string to captions
-// For each caption
-		// if the caption contains string
-			// Show corresponding image (to be animated)
-		// if caption does not contain string
-			// Hide corresponding image	(to be animated)
-
+// filter function for search field
 var filter = function() {
-	//trims and lower-cases search query
-	var query = this.value.trim().toLowerCase();
-
-	//for each img element in the cache array
-	cache.forEach(function(img) {
-		//sets counter to number images in gallery
-		var index = 0;
-		
-		//if there is a search query entered
-		if (query) {
-			//sets index to be the index of the img whose alt contains the query
-			index = img.text.indexOf(query);
-			
-			//if there is no match
-			if (index === -1) {
-				//sets display for that img's 
-				//thumbnail container div (parent's parent) to none
-				img.element.parentNode.parentNode.style.display = 'none';
-				
-				//else sets display for that img's 
-				//thumbnail container div (parent's parent) to default
-			} else {
-				img.element.parentNode.parentNode.style.display = '';
-			} 
-		
-		}
+	//sets searchText as whatever is entered in search field
+	var query = $searchField.val();
+	//for each thumbnail div
+	$(".thumbnail").each(function(){
+		//sets altText as the alt attribute 
+		//of the img child of the anchor child of the thumbnail div
+		var altText = $(this).children().children("img").attr("alt");
+		//if the search term is 'not not present' in the alt text
+		if (altText.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+			//show the thumbnail (including its child a and a's child img)
+			$(this).fadeIn();
+		//if the search term is 'not present' in the alt text
+		} else {
+			//hide the thumbnail and its contents
+			$(this).fadeOut("fast");
+		};
 	});
 }
 
@@ -164,3 +151,11 @@ $searchField.keyup(filter);
 /* Support additional media types 
 like YouTube videos */
 
+$(".video-thumbnail a").click(function(event){
+	event.preventDefault();
+	$overlay2.slideDown();
+});
+
+$overlay2.click(function() {
+	$overlay2.slideUp();
+});
