@@ -8,9 +8,9 @@ var $caption = $("<p id='caption'></p>");
 var $leftArrow = $("<button class='arrow'>&#10094</button>");
 var $rightArrow = $("<button class='arrow'>&#10095</button>");
 
-//variables for 
+//variables for video
 var $overlay2 = $("<div id='overlayTwo'></div>");
-var $youtubeOverlay = $('<iframe id="youtube-canvas" width="560" height="315" src="https://www.youtube.com/embed/8rFG-Uk4hZs" frameborder="0" allowfullscreen></iframe>');
+var $youtubeOverlay = $('<iframe id="youtube-canvas" width="560" height="315" frameborder="0" allowfullscreen></iframe>');
 
 // Variables for search 
 var $searchField = $("input.search");
@@ -28,6 +28,8 @@ var $galleryLength = $thumbnails.length;
 $innerOverlay.append($leftArrow);
 // Add image to inner overlay div
 $innerOverlay.append($image);
+// Add youtube overlay to inner overlay div
+$innerOverlay.append($youtubeOverlay);
 // Add right arrow to overlay
 $innerOverlay.append($rightArrow);
 // Add a div inside the overlay for flex positioning the img and arrow buttons
@@ -35,17 +37,27 @@ $overlay.append($innerOverlay);
 // Add caption to overlay
 $overlay.append($caption);
 
-$overlay2.append($youtubeOverlay);
+
 // Add overlay to document
 $("body").append($overlay);
-//Add overlay2 to document
-$("body").append($overlay2);
+/*Add overlay2 to document
+$("body").append($overlay2);*/
 
 /* Update image function 
 (use for initial overlay and overlay navigation)*/
 
 var updateImage = function(imageLocation, imageCaption) {
-	$image.attr("src", imageLocation);
+	//if the thumbnail is a video
+	//HOW TO TARGET THE THUMBNAIL DIV BEING UPDATED TO?
+	//BY $INDEX?
+	if ($(this).parent().hasClass("video-thumbnail")) {
+		console.log($(this).parent());
+		$youtubeOverlay.attr("src", imageLocation)
+		$image.hide();
+	} else {
+		$image.attr("src", imageLocation);
+		$youtubeOverlay.hide();
+	}
 	$caption.text(imageCaption);
 }
 
@@ -57,13 +69,13 @@ $(".thumbnail a").click(function(event){
 	// Set imageLocation as clicked image's href
 	var imageLocation = $(this).attr("href");
 	// Get child's alt attribute and set caption
-	var imageCaption = $(this).children("img").attr("alt");
+	var imageCaption = $(this).children().attr("alt");
 	// Update index to current selected image
 	$index = $(this).parent().index();
 	// call updateImage function
 	updateImage(imageLocation, imageCaption);
-	// Show overlay
 	$overlay.slideDown(imageLocation);
+	
 });
 
 // Overlay nav button function
@@ -119,6 +131,11 @@ $overlay.click(function(event){
 	$(this).slideUp("fast");
 });
 
+/*$overlay2.click(function() {
+	$overlay2.slideUp();
+});
+*/
+
 
 /* Enable search, dynamically hiding photos whose
 captions do not include the inputted string and 
@@ -149,13 +166,11 @@ var filter = function() {
 $searchField.keyup(filter);
 
 /* Support additional media types 
-like YouTube videos */
+like YouTube videos 
 
 $(".video-thumbnail a").click(function(event){
 	event.preventDefault();
 	$overlay2.slideDown();
 });
+*/
 
-$overlay2.click(function() {
-	$overlay2.slideUp();
-});
