@@ -2,20 +2,19 @@
 left arrow, and right arrow */
 
 var $overlay = $("<div id='overlay'></div>");
-var $innerOverlay = $("<div id='inner-overlay'></div>")
+var $innerOverlay = $("<div id='inner-overlay'></div>");
 var $image = $("<img>");
 var $caption = $("<p id='caption'></p>");
 var $leftArrow = $("<button class='arrow'>&#10094</button>");
 var $rightArrow = $("<button class='arrow'>&#10095</button>");
 
 //variables for video
-var $overlay2 = $("<div id='overlayTwo'></div>");
-var $youtubeOverlay = $('<iframe id="youtube-canvas" width="560" height="315" frameborder="0" allowfullscreen></iframe>');
+var $youtubeOverlay = $('<iframe id="youtube-canvas" frameborder="0" allowfullscreen></iframe>');
 
 // Variables for search 
 var $searchField = $("input.search");
 var $thumbnails = $(".thumbnail img");
-var cache = [];
+//var cache = [];
 
 // Keep track of image index for prev/next navigation
 var $index = 0;
@@ -36,30 +35,43 @@ $innerOverlay.append($rightArrow);
 $overlay.append($innerOverlay);
 // Add caption to overlay
 $overlay.append($caption);
-
-
 // Add overlay to document
 $("body").append($overlay);
-/*Add overlay2 to document
-$("body").append($overlay2);*/
+
+
+//check if this is a video or image, and hide appropriate overlay div
+var mediaCheck = function(thing) {
+	var $thing = $(thing);
+	if ($thing.parent().hasClass("video-thumbnail")) {
+		console.log("video");
+		mediaType = "video";
+		
+	} else {
+		console.log("photo");
+		mediaType = "photo";	
+	}
+};
 
 /* Update image function 
 (use for initial overlay and overlay navigation)*/
 
 var updateImage = function(imageLocation, imageCaption) {
-	//if the thumbnail is a video
-	//HOW TO TARGET THE THUMBNAIL DIV BEING UPDATED TO?
-	//BY $INDEX?
-	if ($(this).parent().hasClass("video-thumbnail")) {
-		console.log($(this).parent());
-		$youtubeOverlay.attr("src", imageLocation)
-		$image.hide();
-	} else {
+	if (mediaType="photo") {
+		console.log("it is a photo");
+		//set img source as imageLocation
 		$image.attr("src", imageLocation);
-		$youtubeOverlay.hide();
+		$youtubeOverlay.hide("fast");
+		$image.show("fast");
+	} else if (mediaType="video") {
+		console.log("it is a video");
+		//set youtubeOverlay source as imageLocation
+		$youtubeOverlay.attr("src", imageLocation);
+		$image.hide("fast");
+		$youtubeOverlay.show("fast");
 	}
+	//set caption as imageCaption
 	$caption.text(imageCaption);
-}
+};
 
 
 // On image link click
@@ -72,6 +84,9 @@ $(".thumbnail a").click(function(event){
 	var imageCaption = $(this).children().attr("alt");
 	// Update index to current selected image
 	$index = $(this).parent().index();
+
+	//call mediaCheck function on clicked thumbnail
+	mediaCheck($(this));
 	// call updateImage function
 	updateImage(imageLocation, imageCaption);
 	$overlay.slideDown(imageLocation);
@@ -102,9 +117,12 @@ var prevNext = function(prev) {
 	var imageLocation = $(newImgSelected).attr("href");
 	var imageCaption = $(newImgSelected).children("img").attr("alt");
 
+	//media check the thumbnail we're moving to
+	var newThumbnail = $(newImgSelected);
+	mediaCheck(newThumbnail);
 	//Update overlay
 	updateImage(imageLocation, imageCaption);
-}
+};
 
 //Cycles through images in overlay on arrow clicks
 $leftArrow.click(function(event){
@@ -131,11 +149,6 @@ $overlay.click(function(event){
 	$(this).slideUp("fast");
 });
 
-/*$overlay2.click(function() {
-	$overlay2.slideUp();
-});
-*/
-
 
 /* Enable search, dynamically hiding photos whose
 captions do not include the inputted string and 
@@ -158,19 +171,12 @@ var filter = function() {
 		} else {
 			//hide the thumbnail and its contents
 			$(this).fadeOut("fast");
-		};
+		}
 	});
-}
+};
 
 // Triggers filter function on keyup in search field
 $searchField.keyup(filter);
 
-/* Support additional media types 
-like YouTube videos 
 
-$(".video-thumbnail a").click(function(event){
-	event.preventDefault();
-	$overlay2.slideDown();
-});
-*/
 
