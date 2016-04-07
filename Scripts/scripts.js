@@ -23,14 +23,12 @@ var $index = 0;
 var $galleryLength = $thumbnails.length;
 
 
-// Add left arrow to inner overlay div
-$innerOverlay.append($leftArrow);
+
 // Add image to inner overlay div
-$innerOverlay.append($image);
+//$innerOverlay.append($image);
 // Add youtube overlay to inner overlay div
-$innerOverlay.append($youtubeOverlay);
-// Add right arrow to overlay
-$innerOverlay.append($rightArrow);
+//$innerOverlay.append($youtubeOverlay);
+
 // Add a div inside the overlay for flex positioning the img and arrow buttons
 $overlay.append($innerOverlay);
 // Add caption to overlay
@@ -39,35 +37,45 @@ $overlay.append($caption);
 $("body").append($overlay);
 
 
-//check if this is a video or image, and hide appropriate overlay div
+//function to insert either the image or video into the overlay
+//depending on the media selected by click or arrow navigation
+var prepOverlay = function(thing) {
+	// Add left arrow to inner overlay div
+	$innerOverlay.append($leftArrow);
+	// Add media to the overlay
+	$innerOverlay.append(thing);
+	// Add right arrow to overlay
+	$innerOverlay.append($rightArrow);
+}
+
+//check if this is a video or photo and set mediaType variable
 var mediaCheck = function(thing) {
 	var $thing = $(thing);
+	console.log($thing);
 	if ($thing.parent().hasClass("video-thumbnail")) {
-		console.log("video");
 		mediaType = "video";
-		
 	} else {
-		console.log("photo");
 		mediaType = "photo";	
 	}
+	console.log("mediaType is " + mediaType);
 };
 
 /* Update image function 
 (use for initial overlay and overlay navigation)*/
 
 var updateImage = function(imageLocation, imageCaption) {
-	if (mediaType="photo") {
+	if (mediaType === "photo") {
 		console.log("it is a photo");
 		//set img source as imageLocation
 		$image.attr("src", imageLocation);
-		$youtubeOverlay.hide("fast");
-		$image.show("fast");
-	} else if (mediaType="video") {
+		$youtubeOverlay.detach();
+		prepOverlay($image);
+	} else if (mediaType === "video") {
 		console.log("it is a video");
 		//set youtubeOverlay source as imageLocation
 		$youtubeOverlay.attr("src", imageLocation);
-		$image.hide("fast");
-		$youtubeOverlay.show("fast");
+		$image.detach();
+		prepOverlay($youtubeOverlay);
 	}
 	//set caption as imageCaption
 	$caption.text(imageCaption);
@@ -122,6 +130,7 @@ var prevNext = function(prev) {
 	mediaCheck(newThumbnail);
 	//Update overlay
 	updateImage(imageLocation, imageCaption);
+	console.log(imageLocation);
 };
 
 //Cycles through images in overlay on arrow clicks
