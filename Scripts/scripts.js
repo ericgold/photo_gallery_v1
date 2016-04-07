@@ -1,4 +1,4 @@
-/* Create an overlay with image container, caption,
+/* Create a LIGHTBOX with image container, caption,
 left arrow, and right arrow */
 
 var $overlay = $("<div id='overlay'></div>");
@@ -22,20 +22,12 @@ var $index = 0;
 // Get list of gallery images and track length of list
 var $galleryLength = $thumbnails.length;
 
-
-
-// Add image to inner overlay div
-//$innerOverlay.append($image);
-// Add youtube overlay to inner overlay div
-//$innerOverlay.append($youtubeOverlay);
-
-// Add a div inside the overlay for flex positioning the img and arrow buttons
+// Add a div inside the overlay for positioning the img and arrow buttons
 $overlay.append($innerOverlay);
 // Add caption to overlay
 $overlay.append($caption);
-// Add overlay to document
+// Add overlay to body
 $("body").append($overlay);
-
 
 //function to insert either the image or video into the overlay
 //depending on the media selected by click or arrow navigation
@@ -46,18 +38,16 @@ var prepOverlay = function(thing) {
 	$innerOverlay.append(thing);
 	// Add right arrow to overlay
 	$innerOverlay.append($rightArrow);
-}
+};
 
 //check if this is a video or photo and set mediaType variable
 var mediaCheck = function(thing) {
 	var $thing = $(thing);
-	console.log($thing);
 	if ($thing.parent().hasClass("video-thumbnail")) {
 		mediaType = "video";
 	} else {
 		mediaType = "photo";	
 	}
-	console.log("mediaType is " + mediaType);
 };
 
 /* Update image function 
@@ -65,13 +55,11 @@ var mediaCheck = function(thing) {
 
 var updateImage = function(imageLocation, imageCaption) {
 	if (mediaType === "photo") {
-		console.log("it is a photo");
 		//set img source as imageLocation
 		$image.attr("src", imageLocation);
 		$youtubeOverlay.detach();
 		prepOverlay($image);
 	} else if (mediaType === "video") {
-		console.log("it is a video");
 		//set youtubeOverlay source as imageLocation
 		$youtubeOverlay.attr("src", imageLocation);
 		$image.detach();
@@ -92,16 +80,16 @@ $(".thumbnail a").click(function(event){
 	var imageCaption = $(this).children().attr("alt");
 	// Update index to current selected image
 	$index = $(this).parent().index();
-
 	//call mediaCheck function on clicked thumbnail
 	mediaCheck($(this));
 	// call updateImage function
 	updateImage(imageLocation, imageCaption);
+	//show the overlay with that content
 	$overlay.slideDown(imageLocation);
 	
 });
 
-// Overlay nav button function
+// Overlay nav arrow button function
 var prevNext = function(prev) {
 	//when prev is false, increase index
 	//when prev is true, decrease index
@@ -130,7 +118,6 @@ var prevNext = function(prev) {
 	mediaCheck(newThumbnail);
 	//Update overlay
 	updateImage(imageLocation, imageCaption);
-	console.log(imageLocation);
 };
 
 //Cycles through images in overlay on arrow clicks
@@ -159,7 +146,7 @@ $overlay.click(function(event){
 });
 
 
-/* Enable search, dynamically hiding photos whose
+/* Enable SEARCH, dynamically hiding photos whose
 captions do not include the inputted string and 
 updating for each character entered */
 
