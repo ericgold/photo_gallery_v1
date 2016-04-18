@@ -105,7 +105,9 @@ var prevNext = function(prev) {
 	} else if ($index > $galleryLength-1) {
 		$index = 0;
 	}
+};
 
+var postImage = function() {
 	//Get element by index and get its link
 	var newImgSelected = $(".thumbnail").get($index).getElementsByTagName("a");
 
@@ -118,23 +120,28 @@ var prevNext = function(prev) {
 	mediaCheck(newThumbnail);
 	//Update overlay
 	updateImage(imageLocation, imageCaption);
+	
 };
 
 //Cycles through images in overlay on arrow clicks
 $leftArrow.click(function(event){
 	prevNext(true);
+	postImage();
 });
 
 $rightArrow.click(function(event){
 	prevNext();
+	postImage();
 });
 
 //Cycles through images in overlay on keyboard arrow press
 $(document).bind('keydown', function(event) {
 	if(event.keyCode == 37) {
 		prevNext(true);
+		postImage();
 	} else if(event.keyCode == 39) {
 		prevNext();
+		postImage();
 	}
 });
 
