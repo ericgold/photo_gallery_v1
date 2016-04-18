@@ -120,7 +120,6 @@ var postImage = function() {
 	mediaCheck(newThumbnail);
 	//Update overlay
 	updateImage(imageLocation, imageCaption);
-	
 };
 
 //Cycles through images in overlay on arrow clicks
